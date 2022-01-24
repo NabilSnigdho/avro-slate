@@ -1,0 +1,48 @@
+{
+  "name": "avro-slate",
+  "version": "0.0.0",
+  "license": "MPL-2.0",
+  "scripts": {
+    "wasm": "wasm-pack build ./okkhor --target web",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@carbon/icons-react": "^10.45.0",
+    "@popperjs/core": "^2.11.2",
+    "awesome-debounce-promise": "^2.1.0",
+    "fastest-levenshtein": "^1.0.12",
+    "idb-keyval": "^6.1.0",
+    "react": "^17.0.2",
+    "react-async-hook": "^4.0.0",
+    "react-dom": "^17.0.2",
+    "react-popper": "^2.2.5",
+    "slate": "^0.72.3",
+    "slate-history": "^0.66.0",
+    "slate-react": "^0.72.6",
+    "use-constant": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/benchmark": "^2.1.1",
+    "@types/carbon__icons-react": "^10.31.2",
+    "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.10.0",
+    "@typescript-eslint/parser": "^5.10.0",
+    "@vitejs/plugin-react": "^1.1.4",
+    "benny": "^3.7.1",
+    "eslint": "^8.7.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "prettier": "^2.5.1",
+    "typescript": "^4.5.5",
+    "vite": "^2.7.13",
+    "vite-plugin-pwa": "^0.11.13",
+    "vite-plugin-wasm-pack": "^0.1.9",
+    "vite-plugin-windicss": "^1.6.3",
+    "windicss": "^3.4.3",
+    "workbox-window": "^6.4.2"
+  }
+}

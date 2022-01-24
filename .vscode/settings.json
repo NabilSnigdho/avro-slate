@@ -1,0 +1,13 @@
+{
+  "npm.packageManager": "pnpm",
+  "editor.tabSize": 2,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "eslint.packageManager": "pnpm",
+  "editor.unicodeHighlight.allowedCharacters": {
+    "৭": true,
+    "৪": true,
+    "০": true
+  }
+}

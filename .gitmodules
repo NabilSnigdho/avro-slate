@@ -1,0 +1,4 @@
+[submodule "okkhor"]
+	path = okkhor
+	url = https://github.com/NabilSnigdho/okkhor
+	branch = wasm
