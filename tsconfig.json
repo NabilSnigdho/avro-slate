@@ -15,7 +15,11 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["vite-plugin-pwa/client"]
+    "types": ["vite-plugin-pwa/client"],
+    "baseUrl": ".",
+    "paths": {
+      "okkhor": ["okkhor/pkg"]
+    }
   },
   "include": ["./src"]
 }

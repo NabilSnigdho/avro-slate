@@ -24,8 +24,11 @@ jobs:
         with:
           version: 'latest'
 
-      - name: Build Okkhor
-        run: wasm-pack build ./okkhor --target web
+      - name: Build Rust wasm crates
+        run: pnpm wasm
+
+      - name: TS type check
+        run: pnpm tsc
 
       - name: Vite Build
         run: pnpm vite build --base=/avro-slate/

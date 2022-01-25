@@ -2,9 +2,7 @@
 
 Avro Slate is is a full featured Avro Phonetic application with dictionary support. It is built with [Slate](https://github.com/ianstormtaylor/slate), [Windi CSS](https://windicss.org), [Vite](https://vitejs.dev), [অক্ষর - Okkhor](https://github.com/gulshan/okkhor) and many other awesome libraries and tools.
 
-Avro Slate is inspired by [AvroPad](https://github.com/omicronlab/avro-pad/) and provides almost the functionality and UI. Avro Slate also uses dictionary data and code from [ibus-avro](https://github.com/sarim/ibus-avro), so the dictionary suggestion is expected to be almost(see the differences below) identical.
-
-Although I wanted to use [riti (রীতি)](https://github.com/OpenBangla/riti/) as the backend initially, it seems porting it to wasm is not that straightforward, because it uses file io. Nevertheless the code of this project is heavily inspired by riti and OBK.
+Avro Slate is inspired by [AvroPad](https://github.com/omicronlab/avro-pad/) and provides almost the same functionality and UI. Avro Slate also uses dictionary data and code from [ibus-avro](https://github.com/sarim/ibus-avro), so the dictionary suggestion is expected to be somewhat identical with some enhancements(see the differences below). A portion of the avro phonetic library is taken from [riti (রীতি)](https://github.com/OpenBangla/riti/). Riti might be included with wasm support as the backend in future versions.
 
 ## Suggestion differences from AvroPad
 
@@ -46,20 +44,13 @@ npm run wasm
 npm run dev
 ```
 
-## Build
+### Production Build
 
-If you are building for the first time and haven't started dev server at least once, run
-
-```sh
-npm run vite build
-```
-it will skip typecheck and copy wasm packages to ./node_modules.
-
-Otherwise run
+To build the project for production, run
 ```sh
 npm run build
 ```
-Either way the project will be build for production under ./dist directory.
+This will build the project under ./dist directory.
 
 To locally preview the production build, run
 ```sh
