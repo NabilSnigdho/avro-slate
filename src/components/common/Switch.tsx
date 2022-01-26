@@ -9,7 +9,7 @@ const Switch: FC<{
     <label {...props}>
       <input
         type="checkbox"
-        className="w-0 h-0 opacity-0"
+        className="w-0 h-0 opacity-0 absolute"
         defaultChecked={checked}
         onChange={onChange}
       />

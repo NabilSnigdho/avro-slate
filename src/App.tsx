@@ -35,6 +35,9 @@ function App() {
   const toggleLanguage = useConstant(() => () => {
     settingsDispatch({ type: 'toggleLanguage' })
   })
+  const setIsBN = useConstant(() => (isBN: boolean) => {
+    settingsDispatch({ type: 'setIsBN', payload: { isBN } })
+  })
   const keyboardToggleLang = useConstant(() => (event: KeyboardEvent) => {
     if (event.ctrlKey && event.key === '.') {
       event.preventDefault()
@@ -70,6 +73,7 @@ function App() {
           id={draftId}
           initialValue={draftValue.result}
           saveDraft={saveDraft}
+          setIsBN={setIsBN}
           settings={settings}
         ></Editor>
       )}
@@ -91,7 +95,10 @@ function App() {
           </dl>
         </section>
         <nav className="mt-auto">
-          <a href="https://github.com/NabilSnigdho/avro-slate" className="inline-flex items-center gap-x-2">
+          <a
+            href="https://github.com/NabilSnigdho/avro-slate"
+            className="inline-flex items-center gap-x-2"
+          >
             <LogoGithub32 className="w-8 h-8" />
             <span>Source Code</span>
           </a>

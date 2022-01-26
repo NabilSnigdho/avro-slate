@@ -31,7 +31,7 @@ export default class AvroPhonetic {
   }
 
   private addUserSelection(input: string, candidate: string) {
-    // Seperate begining and trailing padding characters, punctuations etc. from whole word
+    // Separate beginning and trailing padding characters, punctuations etc. from whole word
     const splitWord = separatePadding(input)
     this.userSelections[splitWord.middle] = candidate
   }

@@ -26,6 +26,10 @@ Currently known differences are:
 ["কোন", "কোনও", "কওন", "কোঁ", "কোং","কোণ", "কন", "কওনও", "কোঁও", "কোঙও", "kOnO"]
 ```
 
+## Android support
+
+One of the key features of Avro Slate is that it behaves similar to the native IMs. It does not reads the value from the text field but from the keyboard event. As most Android on-screen keyboards does NOT send key-codes on keyboard events, Avro Slate is not supported in Android.
+
 ## Development
 
 ### Install npm dependencies

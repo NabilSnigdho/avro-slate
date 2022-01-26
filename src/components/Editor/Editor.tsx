@@ -34,8 +34,9 @@ const Editor: FC<{
   id: number
   initialValue: Descendant[] | undefined
   settings: SettingsState
+  setIsBN: (isBN: boolean) => void
   saveDraft: (draftId: number, value: Descendant[]) => Promise<void>
-}> = ({ id, initialValue, settings: { isBN }, saveDraft }) => {
+}> = ({ id, initialValue, settings: { isBN }, setIsBN, saveDraft }) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), [])
   const avro = useConstant(() => new AvroPhonetic())
 
@@ -53,10 +54,9 @@ const Editor: FC<{
       const { key } = event
       if (!isBN || event.nativeEvent.isComposing || ModifierKeys.has(key))
         return
-      if (!avro.ongoingInputSession) {
-        const { selection } = editor
-        if (selection && Range.isCollapsed(selection))
-          inputStartRef.current = Range.start(selection)
+      if (key === 'Unidentified') {
+        setIsBN(false)
+        return
       }
 
       if (
@@ -64,14 +64,19 @@ const Editor: FC<{
         !(event.ctrlKey || event.altKey || event.metaKey)
       ) {
         event.preventDefault()
-        const suggestion = avro.getSuggestionForKey(key)
 
         const { selection } = editor
-        if (selection && !Range.isCollapsed(selection)) {
-          Transforms.insertText(editor, '')
-          inputStartRef.current = Range.start(selection)
+        if (selection) {
+          if (Range.isCollapsed(selection)) {
+            if (!avro.ongoingInputSession)
+              inputStartRef.current = Range.start(selection)
+          } else {
+            Transforms.insertText(editor, '')
+            inputStartRef.current = Range.start(selection)
+          }
         }
 
+        const suggestion = avro.getSuggestionForKey(key)
         suggestionDispatch({ type: 'setSuggestion', payload: suggestion })
         return
       }
@@ -117,7 +122,7 @@ const Editor: FC<{
       }
       suggestionDispatch({ type: 'clearSuggestion' })
     },
-    [avro, editor, isBN, suggestionState]
+    [avro, editor, isBN, setIsBN, suggestionState]
   )
 
   const onClick = useCallback(() => {
