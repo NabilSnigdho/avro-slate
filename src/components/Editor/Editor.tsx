@@ -16,7 +16,13 @@ import {
   Point,
   Transforms,
 } from 'slate'
-import { Slate, Editable, withReact, ReactEditor } from 'slate-react'
+import {
+  Slate,
+  Editable,
+  withReact,
+  ReactEditor,
+  DefaultPlaceholder,
+} from 'slate-react'
 import { withHistory } from 'slate-history'
 
 import AvroPhonetic from '../../avro-phonetic'
@@ -28,15 +34,21 @@ import suggestionReducer, {
 import type { AvroSlateEditor } from './custom-types'
 import useConstant from 'use-constant'
 import Portal from '../common/Portal'
-import { SettingsState } from '../../reducers/settings'
+import { SettingsAction, SettingsState } from '../../reducers/settings'
 
 const Editor: FC<{
   id: number
   initialValue: Descendant[] | undefined
-  settings: SettingsState
-  setIsBN: (isBN: boolean) => void
   saveDraft: (draftId: number, value: Descendant[]) => Promise<void>
-}> = ({ id, initialValue, settings: { isBN }, setIsBN, saveDraft }) => {
+  settings: SettingsState
+  settingsDispatch: React.Dispatch<SettingsAction>
+}> = ({
+  id,
+  initialValue,
+  settings: { isBN },
+  settingsDispatch,
+  saveDraft,
+}) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), [])
   const avro = useConstant(() => new AvroPhonetic())
 
@@ -55,7 +67,7 @@ const Editor: FC<{
       if (!isBN || event.nativeEvent.isComposing || ModifierKeys.has(key))
         return
       if (key === 'Unidentified') {
-        setIsBN(false)
+        settingsDispatch({ type: 'setIsBN', payload: { isBN: false } })
         return
       }
 
@@ -122,7 +134,7 @@ const Editor: FC<{
       }
       suggestionDispatch({ type: 'clearSuggestion' })
     },
-    [avro, editor, isBN, setIsBN, suggestionState]
+    [avro, editor, isBN, settingsDispatch, suggestionState]
   )
 
   const onClick = useCallback(() => {
@@ -178,6 +190,10 @@ const Editor: FC<{
         onKeyDown={onKeyDown}
         onClick={onClick}
         placeholder="Write Here"
+        renderPlaceholder={(placeholderProps) => {
+          placeholderProps.attributes.style.opacity = '0.54'
+          return <DefaultPlaceholder {...placeholderProps} />
+        }}
         className={`p-3 flex-grow md:(max-h-screen overflow-y-auto)${
           isBN ? ' border-orange-400' : ''
         } <md:(border-l-4 border-r-4)`}

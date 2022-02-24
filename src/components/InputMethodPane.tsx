@@ -1,7 +1,7 @@
+import { Switch } from '@headlessui/react'
 import React, { FC } from 'react'
 import { SettingsState } from '../reducers/settings'
 import Key, { CtrlKey } from './common/Key'
-import Switch from './common/Switch'
 
 const InputMethodPane: FC<{
   settings: SettingsState
@@ -13,23 +13,20 @@ const InputMethodPane: FC<{
       <span className="<md:hidden">
         <CtrlKey /> + <Key>.</Key>
       </span>
-      <span className="text-gray-600 md:hidden">Swipe anywhere to switch</span>
+      <span className="text-gray-600 dark:text-gray-300 md:hidden">Swipe anywhere to switch</span>
 
       <Switch
         checked={isBN}
         onChange={toggleLanguage}
-        className={`inline-flex items-center font-mono text-sm p-px${
-          isBN ? ' bg-gray-900 text-white' : ''
-        } cursor-pointer select-none border border-gray-900 rounded-full transition-colors ${transitionCommon}`}
+        className={`inline-flex items-center font-mono text-sm p-px focusable !focus-visible:ring-blue-500${
+          isBN ? ' bg-dark-900 text-white dark:(bg-white text-dark-300)' : ''
+        } cursor-pointer select-none ring-1 ring-current rounded-full transition-colors ${transitionCommon}`}
       >
-        <span className="sr-only">Switch Input Language</span>
         <span
-          className={`w-5 h-5 rounded-full${
-            isBN ? ' bg-white' : ' bg-gray-900'
-          } relative ${transitionCommon}`}
+          className={`w-5 h-5 mx-px rounded-full bg-current relative ${transitionCommon}`}
           style={{
             transitionProperty: 'left, background-color',
-            left: isBN ? 'calc(100% - 1.25rem)' : 0,
+            left: isBN ? 'calc(100% - 22px)' : 0,
           }}
           aria-hidden="true"
         ></span>
@@ -37,7 +34,7 @@ const InputMethodPane: FC<{
           className={`uppercase px-2 relative ${transitionCommon}`}
           style={{
             transitionProperty: 'right, color',
-            right: isBN ? '1.25rem' : 0,
+            right: isBN ? '22px' : 0,
           }}
         >
           {isBN ? 'bn' : 'en'}

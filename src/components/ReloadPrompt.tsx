@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 import { useRegisterSW } from 'virtual:pwa-register/react'
 import useConstant from 'use-constant'
-import Toast, { Button } from './common/Toast'
+import Toast from './common/Toast'
 
 const ReloadPrompt: FC = () => {
   const {
@@ -25,7 +25,9 @@ const ReloadPrompt: FC = () => {
 
   return offlineReady ? (
     <Toast text="App ready to work offline">
-      <Button onClick={close}>Close</Button>
+      <button className="button" onClick={close}>
+        Close
+      </button>
     </Toast>
   ) : needRefresh ? (
     <Toast text="New content available, click on reload button to update.">
@@ -34,5 +36,14 @@ const ReloadPrompt: FC = () => {
     </Toast>
   ) : null
 }
+
+const Button: FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({
+  children,
+  ...props
+}) => (
+  <button type="button" {...props} className="button">
+    {children}
+  </button>
+)
 
 export default React.memo(ReloadPrompt)

@@ -56,15 +56,15 @@ const Suggestion: FC<{
         ref={setPopperElement}
         style={styles.popper}
         {...attributes.popper}
-        className="bg-white border border-gray-300 rounded-sm shadow-lg"
+        className="popper"
       >
         <div className="px-2">{rawInput}</div>
-        <ol className="list-decimal list-inside p-px border-t horizontal:flex flex-wrap">
+        <ol className="list-decimal list-inside p-px border-t dark:border-black horizontal:(flex flex-wrap)">
           {candidates.map((suggestion, i) => (
             <li
               key={suggestion}
               className={`px-2 py-px${
-                i === selection ? ' bg-green-300' : ' hover:bg-green-200'
+                i === selection ? ' bg-green-300 dark:bg-rose-700' : ' hover:bg-green-200 dark:hover:bg-rose-600'
               }`}
               onClick={() => {
                 updatePreEdit(editor, inputStart, suggestion)

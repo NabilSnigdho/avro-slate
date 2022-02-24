@@ -17,7 +17,10 @@ import InputMethodPane from './components/InputMethodPane'
 import Drafts from './components/Drafts'
 import ReloadPrompt from './components/ReloadPrompt'
 import Key, { CtrlKey } from './components/common/Key'
-import { LogoGithub32 } from '@carbon/icons-react'
+import { Asleep32, Awake32, LogoGithub32 } from '@carbon/icons-react'
+import { Switch } from '@headlessui/react'
+import { setColorScheme } from './dark-mode'
+import KeyboardShortcuts from './components/KeyboardShortcuts'
 
 function App() {
   const [draftsState, draftsDispatch] = useReducer(draftsReducer, initialDrafts)
@@ -35,9 +38,6 @@ function App() {
   const toggleLanguage = useConstant(() => () => {
     settingsDispatch({ type: 'toggleLanguage' })
   })
-  const setIsBN = useConstant(() => (isBN: boolean) => {
-    settingsDispatch({ type: 'setIsBN', payload: { isBN } })
-  })
   const keyboardToggleLang = useConstant(() => (event: KeyboardEvent) => {
     if (event.ctrlKey && event.key === '.') {
       event.preventDefault()
@@ -54,6 +54,10 @@ function App() {
   }, [draftId])
 
   useEffect(() => {
+    setColorScheme(settings.isDarkMode)
+  }, [settings.isDarkMode])
+
+  useEffect(() => {
     document.addEventListener('keydown', keyboardToggleLang)
     document.addEventListener('horizontalswipe', toggleLanguage)
     return () => {
@@ -63,7 +67,7 @@ function App() {
   }, [toggleLanguage, keyboardToggleLang])
 
   return (
-    <main className="flex min-h-screen md:(divide-x) <md:(divide-y flex-col)">
+    <main className="flex min-h-screen md:(divide-x) <md:(divide-y flex-col) dark:divide-black">
       {draftValue.loading || draftId === null ? (
         <div className="p-3 flex-grow">Loading...</div>
       ) : draftValue.error ? (
@@ -73,36 +77,40 @@ function App() {
           id={draftId}
           initialValue={draftValue.result}
           saveDraft={saveDraft}
-          setIsBN={setIsBN}
           settings={settings}
+          settingsDispatch={settingsDispatch}
         ></Editor>
       )}
-      <aside className="bg-light-100 p-3 md:min-w-64 flex flex-col gap-y-3">
+      <aside className="p-3 md:min-w-64 flex flex-col gap-y-5 bg-gray-100 dark:bg-dark-300">
         <InputMethodPane settings={settings} toggleLanguage={toggleLanguage} />
         <Drafts draftsState={draftsState} draftsDispatch={draftsDispatch} />
-        <section className="<md:hidden text-dark-50">
-          <h1 className="text-lg uppercase">Keyboard Shortcuts</h1>
-          <hr className="mb-2" />
-          <dl className="text-sm grid grid-cols-[1fr,auto] gap-x-3 gap-y-2">
-            <dt>Next Candidate</dt>
-            <dd>
-              <CtrlKey /> + <Key>n</Key>
-            </dd>
-            <dt>Previous Candidate</dt>
-            <dd>
-              <CtrlKey /> + <Key>p</Key>
-            </dd>
-          </dl>
-        </section>
-        <nav className="mt-auto">
+        <footer className="mt-auto flex gap-3">
           <a
             href="https://github.com/NabilSnigdho/avro-slate"
             className="inline-flex items-center gap-x-2"
           >
             <LogoGithub32 className="w-8 h-8" />
-            <span>Source Code</span>
+            <span className="sr-only">Source Code</span>
           </a>
-        </nav>
+          <KeyboardShortcuts />
+          <Switch
+            checked={settings.isDarkMode}
+            onChange={(isDarkMode) =>
+              settingsDispatch({
+                type: 'setIsDarkMode',
+                payload: { isDarkMode },
+              })
+            }
+            className="ml-auto inline-flex items-center"
+          >
+            <span className="sr-only">toggle dark-mode</span>
+            {settings.isDarkMode ? (
+              <Asleep32 className="w-8 h-8" />
+            ) : (
+              <Awake32 className="w-8 h-8" />
+            )}
+          </Switch>
+        </footer>
       </aside>
       <ReloadPrompt />
     </main>

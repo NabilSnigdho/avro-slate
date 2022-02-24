@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 
 const Key: FC = ({ children }) => (
-  <kbd className="border border-gray-300 px-1.5 py-px rounded-md text-gray-600 text-sm">
+  <kbd className="font-bold ring-1 ring-black dark:ring-white px-1.5 py-px rounded-md text-sm">
     {children}
   </kbd>
 )
