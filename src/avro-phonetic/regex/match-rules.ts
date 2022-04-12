@@ -1,4 +1,4 @@
-import { Rule, Scope, Type } from './paterns'
+import { Rule, Scope, Type } from './patterns'
 import { isConsonant, isExact, isPunctuation, isVowel } from './utils'
 
 export const matchRules = (

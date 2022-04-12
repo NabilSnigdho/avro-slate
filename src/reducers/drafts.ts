@@ -104,7 +104,7 @@ const draftsReducer = (
     case 'deleteAllDrafts':
       return {
         drafts: [{ id: 0, title: 'Draft 1' }],
-        currentIndex: 0,
+        currentIndex: null,
       }
     default:
       throw new Error()

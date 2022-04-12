@@ -1,4 +1,4 @@
-import patterns, { MAX_PATTERN_LEN } from './paterns'
+import patterns, { MAX_PATTERN_LEN } from './patterns'
 import { matchRules } from './match-rules'
 import { convertToUnicodeValue, fixString } from './utils'
 

@@ -241,7 +241,6 @@ export default class SuggestionBuilder {
     )
 
     if (!candidatesWithPadding.includes(input)) {
-      candidates.pop()
       if (this.emoticons.has(input)) {
         candidates.unshift(input)
         candidatesWithPadding.unshift(input)

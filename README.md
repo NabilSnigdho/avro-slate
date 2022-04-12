@@ -21,7 +21,7 @@ Currently known differences are:
 ```js
 // For input "kOnO"
 // Candidates in Avro Slate
-["কোন", "কোনও", "কওন", "কোঁ", "কোং","কোণ", "কন", "কওনও", "কোনো", "kOnO"]
+["কোন", "কোনও", "কওন", "কোঁ", "কোং","কোণ", "কন", "কওনও", "কোঁও", "কোনো", "kOnO"]
 // Candidates in AvroPad(phonetic value "কোনো" is missing)
 ["কোন", "কোনও", "কওন", "কোঁ", "কোং","কোণ", "কন", "কওনও", "কোঁও", "কোঙও", "kOnO"]
 ```

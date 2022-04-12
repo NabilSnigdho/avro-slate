@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import patterns, { Pattern } from './paterns'
+import patterns, { Pattern } from './patterns'
 import { matchRules } from './match-rules'
 import { convertToUnicodeValue, fixString } from './utils'
 
