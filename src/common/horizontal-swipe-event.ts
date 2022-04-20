@@ -25,7 +25,7 @@ export const initHorizontalSwipeEvents = ({
       Date.now() - timeDown < swipeTimeout
     ) {
       startEl.dispatchEvent(
-        new CustomEvent('horizontalswipe', {
+        new CustomEvent('horizontal-swipe', {
           bubbles: true,
           cancelable: true,
         })

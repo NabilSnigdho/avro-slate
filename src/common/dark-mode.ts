@@ -3,11 +3,14 @@
  */
 
 export const isDarkMode = (): boolean => {
-  const storedPrefs = localStorage.getItem('color-scheme')
-  if (storedPrefs !== null) {
-    return storedPrefs === 'dark'
+  if (typeof window !== 'undefined') {
+    const storedPrefs = localStorage.getItem('color-scheme')
+    if (storedPrefs !== null) {
+      return storedPrefs === 'dark'
+    }
+    return matchMedia('(prefers-color-scheme: dark)').matches
   }
-  return matchMedia('(prefers-color-scheme: dark)').matches
+  return false
 }
 
 export const setColorScheme = (isDark: boolean) => {

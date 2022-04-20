@@ -1,11 +1,9 @@
 import React, {
-  FC,
   useCallback,
   useEffect,
   useMemo,
   useReducer,
   useRef,
-  useState,
 } from 'react'
 
 import {
@@ -30,31 +28,21 @@ import Suggestion from './Suggestion'
 import suggestionReducer, {
   initialSuggestion,
   SuggestionState,
-} from '../../reducers/suggestion'
+} from './suggestionReducer'
 import type { AvroSlateEditor } from './custom-types'
 import useConstant from 'use-constant'
-import Portal from '../common/Portal'
-import { SettingsAction, SettingsState } from '../../reducers/settings'
+import { Portal } from '@headlessui/react'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { saveCurrentDraft } from '../drafts/draftsAPI'
+import { selectIsBN, setIsBN } from '../settings/settingsSlice'
+import { typingStarted } from './editorSlice'
 
-const Editor: FC<{
-  id: number
-  initialValue: Descendant[] | undefined
-  saveDraft: (draftId: number, value: Descendant[]) => Promise<void>
-  settings: SettingsState
-  settingsDispatch: React.Dispatch<SettingsAction>
-}> = ({
-  id,
-  initialValue,
-  settings: { isBN },
-  settingsDispatch,
-  saveDraft,
-}) => {
+const Editor = ({ initialValue }: { initialValue: Descendant[] }) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), [])
+  const isBN = useAppSelector(selectIsBN)
   const avro = useConstant(() => new AvroPhonetic())
+  const dispatch = useAppDispatch()
 
-  const [value, setValue] = useState<Descendant[]>(
-    initialValue ?? [{ type: 'paragraph', children: [{ text: '' }] }]
-  )
   const [suggestionState, suggestionDispatch] = useReducer(
     suggestionReducer,
     initialSuggestion
@@ -67,7 +55,7 @@ const Editor: FC<{
       if (!isBN || event.nativeEvent.isComposing || ModifierKeys.has(key))
         return
       if (key === 'Unidentified') {
-        settingsDispatch({ type: 'setIsBN', payload: { isBN: false } })
+        dispatch(setIsBN(false))
         return
       }
 
@@ -134,7 +122,7 @@ const Editor: FC<{
       }
       suggestionDispatch({ type: 'clearSuggestion' })
     },
-    [avro, editor, isBN, settingsDispatch, suggestionState]
+    [avro, dispatch, editor, isBN, suggestionState]
   )
 
   const onClick = useCallback(() => {
@@ -176,13 +164,15 @@ const Editor: FC<{
   return (
     <Slate
       editor={editor}
-      value={value}
+      value={initialValue}
       onChange={(value) => {
-        setValue(value)
         const isAstChange = editor.operations.some(
           (op) => 'set_selection' !== op.type
         )
-        if (isAstChange) saveDraft(id, value)
+        if (isAstChange) {
+          dispatch(typingStarted())
+          dispatch(saveCurrentDraft(value))
+        }
       }}
     >
       <Editable
@@ -194,20 +184,20 @@ const Editor: FC<{
           placeholderProps.attributes.style.opacity = '0.54'
           return <DefaultPlaceholder {...placeholderProps} />
         }}
-        className={`p-3 flex-grow md:(max-h-screen overflow-y-auto)${
+        className={`p-3 flex-grow md:max-h-screen overflow-y-auto${
           isBN ? ' border-orange-400' : ''
         } <md:(border-l-4 border-r-4)`}
       />
-      {isBN && (
-        <Portal>
+      <Portal>
+        {isBN && (
           <Suggestion
             suggestionState={suggestionState}
             suggestionDispatch={suggestionDispatch}
             inputStart={inputStartRef.current}
             avro={avro}
           />
-        </Portal>
-      )}
+        )}
+      </Portal>
     </Slate>
   )
 }

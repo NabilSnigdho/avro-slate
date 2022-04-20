@@ -1,23 +1,40 @@
-import React, { FC, useMemo, useState } from 'react'
-import { usePopper } from 'react-popper'
+import React, { useLayoutEffect } from 'react'
+import { useFloating, shift, flip, offset } from '@floating-ui/react-dom'
 import { Point, Range, Editor } from 'slate'
 import { ReactEditor, useSlate } from 'slate-react'
 import { updatePreEdit } from './Editor'
 
 import type AvroPhonetic from '../../avro-phonetic'
 import type { AvroSlateEditor } from './custom-types'
-import type { SuggestionState, SuggestionAction } from '../../reducers/suggestion'
-import type { OffsetModifier } from '@popperjs/core/lib/modifiers/offset'
+import type { SuggestionState, SuggestionAction } from './suggestionReducer'
 
-const Suggestion: FC<{
-  suggestionState: SuggestionState
-  suggestionDispatch: React.Dispatch<SuggestionAction>
-  inputStart: Point | null
-  avro: AvroPhonetic
-}> = ({ suggestionState, suggestionDispatch, inputStart, avro }) => {
+const Suggestion = (
+  {
+    suggestionState: { candidates, selection, rawInput },
+    suggestionDispatch,
+    inputStart,
+    avro
+  }: {
+    suggestionState: SuggestionState,
+    suggestionDispatch: React.Dispatch<SuggestionAction>,
+    inputStart: Point | null,
+    avro: AvroPhonetic
+  }
+) => {
   const editor: AvroSlateEditor = useSlate()
-  const { candidates, selection, rawInput } = suggestionState
-  const referenceElement = useMemo(() => {
+
+  const { x, y, reference, floating, strategy, refs } = useFloating({
+    placement: 'bottom-start',
+    middleware: [
+      shift(),
+      flip(),
+      offset(({ placement }) => ({
+        crossAxis: placement.endsWith('start') ? -9 : 0,
+        mainAxis: 3,
+      })),
+    ],
+  })
+  useLayoutEffect(() => {
     const { selection } = editor
     const start = inputStart
     if (
@@ -31,7 +48,7 @@ const Suggestion: FC<{
         Editor.range(editor, start, Range.end(selection))
       ).getBoundingClientRect()
       const { scrollX, scrollY } = window
-      return {
+      reference({
         getBoundingClientRect: () =>
           DOMRectReadOnly.fromRect({
             x: x + scrollX - window.scrollX,
@@ -39,23 +56,19 @@ const Suggestion: FC<{
             width,
             height,
           }),
-      }
-    } else return null
-  }, [editor, inputStart, rawInput])
-  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(
-    null
-  )
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: 'bottom-start',
-    modifiers: [offset],
-  })
+      })
+    } else reference(null)
+  }, [reference, editor, inputStart, rawInput])
 
-  if (referenceElement !== null && candidates.length > 1)
+  if (refs.reference.current !== null && candidates.length > 1)
     return (
       <div
-        ref={setPopperElement}
-        style={styles.popper}
-        {...attributes.popper}
+        ref={floating}
+        style={{
+          position: strategy,
+          top: y ?? '',
+          left: x ?? '',
+        }}
         className="popper"
       >
         <div className="px-2">{rawInput}</div>
@@ -64,11 +77,13 @@ const Suggestion: FC<{
             <li
               key={suggestion}
               className={`px-2 py-px${
-                i === selection ? ' bg-green-300 dark:bg-rose-700' : ' hover:bg-green-200 dark:hover:bg-rose-600'
+                i === selection
+                  ? ' bg-green-300 dark:bg-rose-700'
+                  : ' hover:bg-green-200 dark:hover:bg-rose-600'
               }`}
               onClick={() => {
                 updatePreEdit(editor, inputStart, suggestion)
-                avro.commit(suggestionState.rawInput, suggestion)
+                avro.commit(rawInput, suggestion)
                 suggestionDispatch({ type: 'clearSuggestion' })
                 ReactEditor.focus(editor)
               }}
@@ -81,12 +96,5 @@ const Suggestion: FC<{
     )
   else return null
 }
-
-const offset = {
-  name: 'offset',
-  options: {
-    offset: ({ placement }) => [placement.endsWith('start') ? -9 : 0, 3],
-  },
-} as OffsetModifier
 
 export default React.memo(Suggestion)

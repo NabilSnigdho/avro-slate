@@ -41,21 +41,9 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,wasm}'],
-        maximumFileSizeToCacheInBytes: 8000000,
+        globPatterns: ['**/*.{js,css,html,wasm,json}'],
+        maximumFileSizeToCacheInBytes: 4500000,
       },
     }),
   ],
-  build: {
-    target: 'esnext',
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes('avro-phonetic/data')) {
-            return 'data'
-          }
-        },
-      },
-    },
-  },
 })

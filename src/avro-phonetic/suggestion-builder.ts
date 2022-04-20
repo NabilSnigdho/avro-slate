@@ -25,20 +25,24 @@
     =============================================================================
 */
 
-import dictionary from './data/dictionary.json'
-import autocorrect from './data/autocorrect.json'
-import emoticons from './data/emoticons.json'
-import suffixes from './data/suffixes.json'
-
 import { parse as regexParse } from './regex/parse'
 import { Parser } from 'okkhor'
 import { distance } from 'fastest-levenshtein'
 
+let autocorrect: Record<string, string>,
+  suffixes: Record<string, string>,
+  emoticons: Set<string>,
+  dictionary: Record<DictionaryKey, string[]>
+
+export const fetchData = async () => {
+  autocorrect = await (await fetch(import.meta.env.BASE_URL + 'data/autocorrect.json')).json()
+  suffixes = await (await fetch(import.meta.env.BASE_URL + 'data/suffixes.json')).json()
+  emoticons = new Set(await (await fetch(import.meta.env.BASE_URL + 'data/emoticons.json')).json())
+  dictionary = await (await fetch(import.meta.env.BASE_URL + 'data/dictionary.json')).json()
+}
+
 export default class SuggestionBuilder {
   private readonly phonetic
-  private readonly autocorrect: Record<string, string> = autocorrect
-  private readonly emoticons = new Set(emoticons)
-  private readonly suffixes: Record<string, string> = suffixes
   private dictionaryCache: Record<string, string[]>
   private tempSuffixCache: Record<string, BaseWord>
 
@@ -50,12 +54,12 @@ export default class SuggestionBuilder {
 
   private getAutocorrect(input: string, splitWord: SplitWord): string | null {
     //Search for whole match
-    const corrected = this.autocorrect[input]
+    const corrected = autocorrect[input]
     if (corrected) {
       return this.phonetic.convert(corrected)
     } else {
       //Whole word is not present, search without padding
-      const corrected = this.autocorrect[correctCase(splitWord.middle)]
+      const corrected = autocorrect[correctCase(splitWord.middle)]
       if (corrected) {
         return (
           splitWord.begin + this.phonetic.convert(corrected) + splitWord.end
@@ -87,7 +91,7 @@ export default class SuggestionBuilder {
     const len = word.length
     if (len >= 2) {
       for (let j = 1; j <= len; j++) {
-        const suffix = this.suffixes[word.substring(j)]
+        const suffix = suffixes[word.substring(j)]
         if (suffix === undefined) continue
         const key = word.substring(0, j)
         if (this.dictionaryCache[key] === undefined) continue
@@ -139,7 +143,7 @@ export default class SuggestionBuilder {
         for (let j = 1; j < len; j++) {
           const testSuffix = word.substring(word.length - j).toLowerCase()
 
-          const suffix = this.suffixes[testSuffix]
+          const suffix = suffixes[testSuffix]
           if (suffix) {
             const key = word.substring(0, word.length - testSuffix.length)
 
@@ -230,25 +234,28 @@ export default class SuggestionBuilder {
     }
 
     const candidates = [...words].slice(0, 10)
+    const extra = []
 
     /* 3rd Item: Classic Avro Phonetic */
     if (!candidates.includes(phonetic))
-      if (candidates.length < 10) candidates.push(phonetic)
-      else candidates[9] = phonetic
+      extra.push(postProcess(splitWord.begin + phonetic + splitWord.end))
 
     const candidatesWithPadding = candidates.map((word) =>
       postProcess(splitWord.begin + word + splitWord.end)
     )
 
     if (!candidatesWithPadding.includes(input)) {
-      if (this.emoticons.has(input)) {
+      if (emoticons.has(input)) {
         candidates.unshift(input)
         candidatesWithPadding.unshift(input)
       } else {
-        candidates.push(input)
-        candidatesWithPadding.push(input)
+        extra.push(input)
       }
     }
+
+    const i = 10 - extra.length
+    candidates.splice(i, candidates.length - i, ...extra)
+    candidatesWithPadding.splice(i, candidatesWithPadding.length - i, ...extra)
 
     return {
       //Is there any previous custom selection of the user?
@@ -347,7 +354,7 @@ const dictSearch = (enText: string) => {
   const retWords = []
 
   for (const key of tableList) {
-    for (const word of dictionary[`w_${key}` as keyof typeof dictionary]) {
+    for (const word of dictionary[`w_${key}` as DictionaryKey]) {
       if (re.test(word)) retWords.push(word)
     }
   }
@@ -371,3 +378,52 @@ const sortByPhoneticRelevance = (phonetic: string, dictSuggestion: string[]) =>
     else if (da > db) return 1
     else return 0
   })
+
+type DictionaryKey =
+  | 'w_a'
+  | 'w_aa'
+  | 'w_i'
+  | 'w_ii'
+  | 'w_u'
+  | 'w_uu'
+  | 'w_rri'
+  | 'w_e'
+  | 'w_oi'
+  | 'w_o'
+  | 'w_ou'
+  | 'w_b'
+  | 'w_bh'
+  | 'w_c'
+  | 'w_ch'
+  | 'w_d'
+  | 'w_dh'
+  | 'w_dd'
+  | 'w_ddh'
+  | 'w_g'
+  | 'w_gh'
+  | 'w_h'
+  | 'w_j'
+  | 'w_jh'
+  | 'w_k'
+  | 'w_kh'
+  | 'w_l'
+  | 'w_m'
+  | 'w_n'
+  | 'w_nga'
+  | 'w_nya'
+  | 'w_nn'
+  | 'w_p'
+  | 'w_ph'
+  | 'w_r'
+  | 'w_rr'
+  | 'w_rrh'
+  | 'w_s'
+  | 'w_sh'
+  | 'w_ss'
+  | 'w_t'
+  | 'w_th'
+  | 'w_tt'
+  | 'w_tth'
+  | 'w_y'
+  | 'w_z'
+  | 'w_khandatta'
