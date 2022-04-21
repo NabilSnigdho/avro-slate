@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { Suspense, useEffect, useRef } from 'react'
 import 'virtual:windi.css'
 import 'virtual:windi-devtools'
 
@@ -8,7 +8,6 @@ import {
   selectIsDarkMode,
   setIsDarkMode,
 } from '../features/settings/settingsSlice'
-import Editor from '../features/editor/Editor'
 import Drafts from '../features/drafts/Drafts'
 import InputMethodPane from '../features/settings/InputMethodPane'
 import ReloadPrompt from '../features/reload-prompt/ReloadPrompt'
@@ -19,6 +18,15 @@ import { Switch } from '@headlessui/react'
 
 import { setColorScheme } from '../common/dark-mode'
 import useConstant from 'use-constant'
+
+import { fetchDictionaryData } from '../avro-phonetic/data'
+import initOkkhor from 'okkhor'
+const editorPromise = Promise.all([
+  import('../features/editor/Editor'),
+  fetchDictionaryData(),
+  initOkkhor(),
+]).then(([Editor]) => Editor)
+const Editor = React.lazy(() => editorPromise)
 
 function App() {
   const dispatch = useAppDispatch()
@@ -43,12 +51,14 @@ function App() {
   return (
     <main className="flex min-h-screen md:(divide-x) <md:(divide-y flex-col) dark:divide-black">
       {initialValue === null ? (
-        <div className="p-3 flex-grow">Loading...</div>
+        <div className="p-3 flex-grow">Loading draft...</div>
       ) : (
-        <Editor
-          key={editorData.current.key}
-          initialValue={initialValue}
-        ></Editor>
+        <Suspense fallback={<div className="p-3 flex-grow">Loading dictionary...</div>}>
+          <Editor
+            key={editorData.current.key}
+            initialValue={initialValue}
+          ></Editor>
+        </Suspense>
       )}
       <aside className="p-3 md:min-w-64 flex flex-col gap-y-5 bg-gray-100 dark:bg-dark-300">
         <InputMethodPane />

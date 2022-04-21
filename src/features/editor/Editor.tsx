@@ -10,7 +10,6 @@ import {
   createEditor,
   Editor as SlateEditor,
   Range,
-  Descendant,
   Point,
   Transforms,
 } from 'slate'
@@ -23,19 +22,20 @@ import {
 } from 'slate-react'
 import { withHistory } from 'slate-history'
 
-import AvroPhonetic from '../../avro-phonetic'
+import { Portal } from '@headlessui/react'
 import Suggestion from './Suggestion'
 import suggestionReducer, {
   initialSuggestion,
   SuggestionState,
 } from './suggestionReducer'
 import type { AvroSlateEditor } from './custom-types'
+import type { Descendant } from 'slate'
 import useConstant from 'use-constant'
-import { Portal } from '@headlessui/react'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { saveCurrentDraft } from '../drafts/draftsAPI'
 import { selectIsBN, setIsBN } from '../settings/settingsSlice'
 import { typingStarted } from './editorSlice'
+import AvroPhonetic from '../../avro-phonetic'
 
 const Editor = ({ initialValue }: { initialValue: Descendant[] }) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), [])

@@ -28,18 +28,7 @@
 import { parse as regexParse } from './regex/parse'
 import { Parser } from 'okkhor'
 import { distance } from 'fastest-levenshtein'
-
-let autocorrect: Record<string, string>,
-  suffixes: Record<string, string>,
-  emoticons: Set<string>,
-  dictionary: Record<DictionaryKey, string[]>
-
-export const fetchData = async () => {
-  autocorrect = await (await fetch(import.meta.env.BASE_URL + 'data/autocorrect.json')).json()
-  suffixes = await (await fetch(import.meta.env.BASE_URL + 'data/suffixes.json')).json()
-  emoticons = new Set(await (await fetch(import.meta.env.BASE_URL + 'data/emoticons.json')).json())
-  dictionary = await (await fetch(import.meta.env.BASE_URL + 'data/dictionary.json')).json()
-}
+import { data, tableListMap } from './data'
 
 export default class SuggestionBuilder {
   private readonly phonetic
@@ -54,12 +43,12 @@ export default class SuggestionBuilder {
 
   private getAutocorrect(input: string, splitWord: SplitWord): string | null {
     //Search for whole match
-    const corrected = autocorrect[input]
+    const corrected = data.autocorrect[input]
     if (corrected) {
       return this.phonetic.convert(corrected)
     } else {
       //Whole word is not present, search without padding
-      const corrected = autocorrect[correctCase(splitWord.middle)]
+      const corrected = data.autocorrect[correctCase(splitWord.middle)]
       if (corrected) {
         return (
           splitWord.begin + this.phonetic.convert(corrected) + splitWord.end
@@ -91,7 +80,7 @@ export default class SuggestionBuilder {
     const len = word.length
     if (len >= 2) {
       for (let j = 1; j <= len; j++) {
-        const suffix = suffixes[word.substring(j)]
+        const suffix = data.suffixes[word.substring(j)]
         if (suffix === undefined) continue
         const key = word.substring(0, j)
         if (this.dictionaryCache[key] === undefined) continue
@@ -143,7 +132,7 @@ export default class SuggestionBuilder {
         for (let j = 1; j < len; j++) {
           const testSuffix = word.substring(word.length - j).toLowerCase()
 
-          const suffix = suffixes[testSuffix]
+          const suffix = data.suffixes[testSuffix]
           if (suffix) {
             const key = word.substring(0, word.length - testSuffix.length)
 
@@ -245,7 +234,7 @@ export default class SuggestionBuilder {
     )
 
     if (!candidatesWithPadding.includes(input)) {
-      if (emoticons.has(input)) {
+      if (data.emoticons.has(input)) {
         candidates.unshift(input)
         candidatesWithPadding.unshift(input)
       } else {
@@ -321,44 +310,14 @@ const isVowel = (char: string) =>
 const dictSearch = (enText: string) => {
   const re = new RegExp(`^${regexParse(enText)}$`)
   // list of tables to search based on left most char of enText
-  const tableList =
-    {
-      a: ['a', 'aa', 'e', 'oi', 'o', 'nya', 'y'],
-      b: ['b', 'bh'],
-      c: ['c', 'ch', 'k'],
-      d: ['d', 'dh', 'dd', 'ddh'],
-      e: ['i', 'ii', 'e', 'y'],
-      f: ['ph'],
-      g: ['g', 'gh', 'j'],
-      h: ['h'],
-      i: ['i', 'ii', 'y'],
-      j: ['j', 'jh', 'z'],
-      k: ['k', 'kh'],
-      l: ['l'],
-      m: ['h', 'm'],
-      n: ['n', 'nya', 'nga', 'nn'],
-      o: ['a', 'u', 'uu', 'oi', 'o', 'ou', 'y'],
-      p: ['p', 'ph'],
-      q: ['k'],
-      r: ['rri', 'h', 'r', 'rr', 'rrh'],
-      s: ['s', 'sh', 'ss'],
-      t: ['t', 'th', 'tt', 'tth', 'khandatta'],
-      u: ['u', 'uu', 'y'],
-      v: ['bh'],
-      w: ['o'],
-      x: ['e', 'k'],
-      y: ['i', 'y'],
-      z: ['h', 'j', 'jh', 'z'],
-    }[enText.toLowerCase().charAt(0)] ?? []
-
+  const tableList = tableListMap[enText.toLowerCase().charAt(0)] ?? []
   const retWords = []
 
   for (const key of tableList) {
-    for (const word of dictionary[`w_${key}` as DictionaryKey]) {
+    for (const word of data.dictionary[key]) {
       if (re.test(word)) retWords.push(word)
     }
   }
-
   return retWords
 }
 
@@ -378,52 +337,3 @@ const sortByPhoneticRelevance = (phonetic: string, dictSuggestion: string[]) =>
     else if (da > db) return 1
     else return 0
   })
-
-type DictionaryKey =
-  | 'w_a'
-  | 'w_aa'
-  | 'w_i'
-  | 'w_ii'
-  | 'w_u'
-  | 'w_uu'
-  | 'w_rri'
-  | 'w_e'
-  | 'w_oi'
-  | 'w_o'
-  | 'w_ou'
-  | 'w_b'
-  | 'w_bh'
-  | 'w_c'
-  | 'w_ch'
-  | 'w_d'
-  | 'w_dh'
-  | 'w_dd'
-  | 'w_ddh'
-  | 'w_g'
-  | 'w_gh'
-  | 'w_h'
-  | 'w_j'
-  | 'w_jh'
-  | 'w_k'
-  | 'w_kh'
-  | 'w_l'
-  | 'w_m'
-  | 'w_n'
-  | 'w_nga'
-  | 'w_nya'
-  | 'w_nn'
-  | 'w_p'
-  | 'w_ph'
-  | 'w_r'
-  | 'w_rr'
-  | 'w_rrh'
-  | 'w_s'
-  | 'w_sh'
-  | 'w_ss'
-  | 'w_t'
-  | 'w_th'
-  | 'w_tt'
-  | 'w_tth'
-  | 'w_y'
-  | 'w_z'
-  | 'w_khandatta'
