@@ -104,7 +104,7 @@ export const draftsSlice = createSlice({
 
 const titleLength = 25
 const makeTitle = (value: Descendant[], id: number) => {
-  const content = value.length ? Node.string(value[0]).trim() : ''
+  const content = value.map(n => Node.string(n)).join('\n').trim().split("\n")[0]
 
   if (content === '') return `Draft ${id + 1}`
   if (content.length <= titleLength) return content
