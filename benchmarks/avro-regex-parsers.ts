@@ -2,6 +2,7 @@ import { add, complete, cycle, suite } from 'benny'
 
 import { parse as a } from '../src/avro-phonetic/regex/parse'
 import { parse as b } from '../src/avro-phonetic/regex/bsearch-parse'
+import { parse as c } from '../src/avro-phonetic/regex/bsearch-parse-range'
 
 const longWords = [
   'okkhorbrritto',
@@ -25,6 +26,12 @@ suite(
   add('Binary Search', () => {
     for (const word of longWords) {
       b(word)
+    }
+  }),
+
+  add('Binary Search(Range)', () => {
+    for (const word of longWords) {
+      c(word)
     }
   }),
 
@@ -55,6 +62,12 @@ suite(
   add('Binary Search', () => {
     for (const word of shortWords) {
       b(word)
+    }
+  }),
+
+  add('Binary Search(Range)', () => {
+    for (const word of shortWords) {
+      c(word)
     }
   }),
 
