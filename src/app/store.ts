@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
-import draftsReducer from '../features/drafts/draftsSlice'
-import editorReducer from '../features/editor/editorSlice'
-import settingsReducer from '../features/settings/settingsSlice'
+import draftsReducer from '@/features/drafts/draftsSlice'
+import editorReducer from '@/features/editor/editorSlice'
+import settingsReducer from '@/features/settings/settingsSlice'
 
 const store = configureStore({
   reducer: {

@@ -4,23 +4,22 @@ import { Point, Range, Editor } from 'slate'
 import { ReactEditor, useSlate } from 'slate-react'
 import { updatePreEdit } from './Editor'
 
-import type AvroPhonetic from '../../avro-phonetic'
+import type AvroPhonetic from 'src/avro-phonetic'
 import type { AvroSlateEditor } from './custom-types'
 import type { SuggestionState, SuggestionAction } from './suggestionReducer'
+import { cls } from '@/common/cls'
 
-const Suggestion = (
-  {
-    suggestionState: { candidates, selection, rawInput },
-    suggestionDispatch,
-    inputStart,
-    avro
-  }: {
-    suggestionState: SuggestionState,
-    suggestionDispatch: React.Dispatch<SuggestionAction>,
-    inputStart: Point | null,
-    avro: AvroPhonetic
-  }
-) => {
+const Suggestion = ({
+  suggestionState: { candidates, selection, rawInput },
+  suggestionDispatch,
+  inputStart,
+  avro,
+}: {
+  suggestionState: SuggestionState
+  suggestionDispatch: React.Dispatch<SuggestionAction>
+  inputStart: Point | null
+  avro: AvroPhonetic
+}) => {
   const editor: AvroSlateEditor = useSlate()
 
   const { x, y, reference, floating, strategy, refs } = useFloating({
@@ -76,11 +75,12 @@ const Suggestion = (
           {candidates.map((suggestion, i) => (
             <li
               key={suggestion}
-              className={`px-2 py-px${
+              className={cls(
+                'px-2 py-px',
                 i === selection
-                  ? ' bg-green-300 dark:bg-rose-700'
-                  : ' hover:bg-green-200 dark:hover:bg-rose-600'
-              }`}
+                  ? 'bg-green-300 dark:bg-rose-700'
+                  : 'hover:bg-green-200 dark:hover:bg-rose-600'
+              )}
               onClick={() => {
                 updatePreEdit(editor, inputStart, suggestion)
                 avro.commit(rawInput, suggestion)

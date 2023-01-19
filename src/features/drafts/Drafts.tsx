@@ -1,17 +1,15 @@
-import React, { useEffect, useRef } from 'react'
-
-import { FiPlus, FiMoreVertical, FiMinus, FiTrash2 } from 'react-icons/fi'
+import { useAppDispatch, useAppSelector } from '@/app/hooks'
+import { flip, useFloating } from '@floating-ui/react-dom'
 import { Menu } from '@headlessui/react'
-import { useFloating, flip } from '@floating-ui/react-dom'
-
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { newDraft, selectDraftState } from './draftsSlice'
+import React, { useEffect, useRef } from 'react'
+import { FiMinus, FiMoreVertical, FiPlus, FiTrash2 } from 'react-icons/fi'
+import { selectIsTyping } from '@/features/editor/editorSlice'
 import {
   deleteAllDrafts,
   deleteDraftByIndex,
-  fetchDraftByIndex,
+  fetchDraftByIndex
 } from './draftsAPI'
-import { selectIsTyping } from '../editor/editorSlice'
+import { newDraft, selectDraftState } from './draftsSlice'
 
 const Drafts = () => {
   const { drafts, currentIndex } = useAppSelector(selectDraftState)

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { isDarkMode } from '../../common/dark-mode'
-import { RootState } from '../../app/store'
+import { isDarkMode } from '@/common/dark-mode'
+import { RootState } from '@/app/store'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 interface SettingsState {

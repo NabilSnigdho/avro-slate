@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { RootState } from '../../app/store'
+import { RootState } from '@/app/store'
 
 interface EditorState {
   isTyping: boolean

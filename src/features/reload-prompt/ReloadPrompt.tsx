@@ -2,7 +2,7 @@ import React from 'react'
 
 import { useRegisterSW } from 'virtual:pwa-register/react'
 import useConstant from 'use-constant'
-import Toast from '../../common/components/Toast'
+import Toast from '@/common/components/Toast'
 
 const ReloadPrompt = () => {
   const {

@@ -2,8 +2,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 import { clear, del, entries, get, set } from 'idb-keyval'
 import type { Descendant } from 'slate'
-import { RootState } from 'src/app/store'
-import { typingStopped } from '../editor/editorSlice'
+import { RootState } from '@/app/store'
+import { typingStopped } from '@/features/editor/editorSlice'
 
 export const fetchDrafts = createAsyncThunk('drafts/fetchDrafts', async () => {
   const res = await entries<number, Descendant[]>()

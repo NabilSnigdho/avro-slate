@@ -1,28 +1,27 @@
-import React, { Suspense, useEffect, useRef } from 'react'
-import 'virtual:windi.css'
 import 'virtual:windi-devtools'
+import 'virtual:windi.css'
 
-import { useAppDispatch, useAppSelector } from './hooks'
-import { selectInitialValue } from '../features/drafts/draftsSlice'
+import { fetchDictionaryData } from '@/avro-phonetic/data'
+import { setColorScheme } from '@/common/dark-mode'
+import Drafts from '@/features/drafts/Drafts'
+import { selectInitialValue } from '@/features/drafts/draftsSlice'
+import KeyboardShortcuts from '@/features/keyboard-shortcuts/KeyboardShortcuts'
+import ReloadPrompt from '@/features/reload-prompt/ReloadPrompt'
+import InputMethodPane from '@/features/settings/InputMethodPane'
 import {
   selectIsDarkMode,
-  setIsDarkMode,
-} from '../features/settings/settingsSlice'
-import Drafts from '../features/drafts/Drafts'
-import InputMethodPane from '../features/settings/InputMethodPane'
-import ReloadPrompt from '../features/reload-prompt/ReloadPrompt'
-import KeyboardShortcuts from '../features/keyboard-shortcuts/KeyboardShortcuts'
+  setIsDarkMode
+} from '@/features/settings/settingsSlice'
+import { Switch } from '@headlessui/react'
+import initOkkhor from 'okkhor'
+import React, { Suspense, useEffect, useRef } from 'react'
 import { FiMoon, FiSun } from 'react-icons/fi'
 import { GoMarkGithub } from 'react-icons/go'
-import { Switch } from '@headlessui/react'
-
-import { setColorScheme } from '../common/dark-mode'
 import useConstant from 'use-constant'
+import { useAppDispatch, useAppSelector } from './hooks'
 
-import { fetchDictionaryData } from '../avro-phonetic/data'
-import initOkkhor from 'okkhor'
 const editorPromise = Promise.all([
-  import('../features/editor/Editor'),
+  import('@/features/editor/Editor'),
   fetchDictionaryData(),
   initOkkhor(),
 ]).then(([Editor]) => Editor)

@@ -1,3 +1,8 @@
+import { useAppDispatch, useAppSelector } from '@/app/hooks'
+import AvroPhonetic from '@/avro-phonetic'
+import { saveCurrentDraft } from '@/features/drafts/draftsAPI'
+import { selectIsBN } from '@/features/settings/settingsSlice'
+import { Portal } from '@headlessui/react'
 import React, {
   useCallback,
   useEffect,
@@ -5,37 +10,30 @@ import React, {
   useReducer,
   useRef,
 } from 'react'
-
+import type { Descendant } from 'slate'
 import {
   createEditor,
   Editor as SlateEditor,
-  Range,
   Point,
+  Range,
   Transforms,
 } from 'slate'
-import {
-  Slate,
-  Editable,
-  withReact,
-  ReactEditor,
-  DefaultPlaceholder,
-} from 'slate-react'
 import { withHistory } from 'slate-history'
-
-import { Portal } from '@headlessui/react'
+import {
+  DefaultPlaceholder,
+  Editable,
+  ReactEditor,
+  Slate,
+  withReact,
+} from 'slate-react'
+import useConstant from 'use-constant'
+import type { AvroSlateEditor } from './custom-types'
+import { typingStarted } from './editorSlice'
 import Suggestion from './Suggestion'
 import suggestionReducer, {
   initialSuggestion,
   SuggestionState,
 } from './suggestionReducer'
-import type { AvroSlateEditor } from './custom-types'
-import type { Descendant } from 'slate'
-import useConstant from 'use-constant'
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { saveCurrentDraft } from '../drafts/draftsAPI'
-import { selectIsBN, setIsBN } from '../settings/settingsSlice'
-import { typingStarted } from './editorSlice'
-import AvroPhonetic from '../../avro-phonetic'
 
 const Editor = ({ initialValue }: { initialValue: Descendant[] }) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), [])
@@ -52,12 +50,13 @@ const Editor = ({ initialValue }: { initialValue: Descendant[] }) => {
   const onKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
       const { key } = event
-      if (!isBN || event.nativeEvent.isComposing || ModifierKeys.has(key))
+      if (
+        !isBN ||
+        event.nativeEvent.isComposing ||
+        ModifierKeys.has(key) ||
+        key === 'Unidentified'
+      )
         return
-      if (key === 'Unidentified') {
-        dispatch(setIsBN(false))
-        return
-      }
 
       if (
         /^[^\P{ASCII} ]$/u.test(key) &&
@@ -177,6 +176,7 @@ const Editor = ({ initialValue }: { initialValue: Descendant[] }) => {
     >
       <Editable
         aria-label="slate"
+        inputMode="none"
         onKeyDown={onKeyDown}
         onClick={onClick}
         placeholder="Write Here"
@@ -184,9 +184,7 @@ const Editor = ({ initialValue }: { initialValue: Descendant[] }) => {
           placeholderProps.attributes.style.opacity = '0.54'
           return <DefaultPlaceholder {...placeholderProps} />
         }}
-        className={`p-3 flex-grow md:max-h-screen overflow-y-auto${
-          isBN ? ' border-orange-400' : ''
-        } <md:(border-l-4 border-r-4)`}
+        className="p-3 flex-grow md:max-h-screen overflow-y-auto"
       />
       <Portal>
         {isBN && (

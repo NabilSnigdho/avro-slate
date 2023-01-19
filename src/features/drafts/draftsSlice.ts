@@ -8,7 +8,7 @@ import {
   saveCurrentDraft,
   deleteAllDrafts,
 } from './draftsAPI'
-import { RootState } from '../../app/store'
+import { RootState } from '@/app/store'
 
 interface DraftsState {
   drafts: { id: number; title: string | null }[]
