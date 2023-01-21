@@ -17,7 +17,7 @@ export const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    toggleLanguage: (state) => {
+    toggleAvro: (state) => {
       state.isBN = !state.isBN
     },
     setIsBN: (state, action: PayloadAction<boolean>) => {
@@ -26,11 +26,11 @@ export const settingsSlice = createSlice({
     setIsDarkMode: (state, action: PayloadAction<boolean>) => {
       state.isDarkMode = action.payload
     },
-  }
+  },
 })
 
 // Action creators are generated for each case reducer function
-export const { toggleLanguage, setIsBN, setIsDarkMode } = settingsSlice.actions
+export const { toggleAvro, setIsBN, setIsDarkMode } = settingsSlice.actions
 
 export const selectIsBN = (state: RootState) => state.settings.isBN
 export const selectIsDarkMode = (state: RootState) => state.settings.isDarkMode

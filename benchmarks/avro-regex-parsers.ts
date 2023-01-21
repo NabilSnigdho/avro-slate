@@ -39,16 +39,7 @@ suite(
   complete()
 )
 
-
-const shortWords = [
-  'OI',
-  'til',
-  'sei',
-  'kak',
-  'ken',
-  'ami',
-  'rel',
-]
+const shortWords = ['OI', 'til', 'sei', 'kak', 'ken', 'ami', 'rel']
 
 suite(
   'Avro Regex Parsers: with short words',

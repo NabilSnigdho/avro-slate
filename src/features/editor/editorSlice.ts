@@ -6,7 +6,7 @@ interface EditorState {
 }
 
 const initialState: EditorState = {
-  isTyping: false
+  isTyping: false,
 }
 
 export const editorSlice = createSlice({
@@ -19,7 +19,7 @@ export const editorSlice = createSlice({
     typingStopped: (state) => {
       state.isTyping = false
     },
-  }
+  },
 })
 
 // Action creators are generated for each case reducer function

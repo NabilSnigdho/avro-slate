@@ -29,7 +29,7 @@ import {
 import useConstant from 'use-constant'
 import type { AvroSlateEditor } from './custom-types'
 import { typingStarted } from './editorSlice'
-import Suggestion from './Suggestion'
+import { Suggestion } from './Suggestion'
 import suggestionReducer, {
   initialSuggestion,
   SuggestionState,
@@ -82,7 +82,7 @@ const Editor = ({ initialValue }: { initialValue: Descendant[] }) => {
 
       if (avro.ongoingInputSession) {
         if (suggestionState.candidates.length > 1) {
-          const isSuggestionWinHorizontal = window.innerHeight < 360
+          const isSuggestionWinHorizontal = window.innerHeight < 622
           if (
             key === (isSuggestionWinHorizontal ? 'ArrowRight' : 'ArrowDown') ||
             key === 'Tab' ||
@@ -121,7 +121,7 @@ const Editor = ({ initialValue }: { initialValue: Descendant[] }) => {
       }
       suggestionDispatch({ type: 'clearSuggestion' })
     },
-    [avro, dispatch, editor, isBN, suggestionState]
+    [avro, editor, isBN, suggestionState]
   )
 
   const onClick = useCallback(() => {
@@ -140,6 +140,87 @@ const Editor = ({ initialValue }: { initialValue: Descendant[] }) => {
     suggestionState.rawInput,
     suggestionState.selection,
   ])
+
+  const onKeyPress = useCallback(
+    (event: Event) => {
+      if (!('detail' in event && typeof event.detail === 'string'))
+        throw new Error('invalid event')
+      const key = event.detail
+      const fnKey = key.match(/^{(.+)}$/)
+
+      if (fnKey !== null) {
+        switch (fnKey[1]) {
+          case 'backspace': {
+            if (isBN && avro.ongoingInputSession) {
+              const suggestion = avro.getSuggestionForBackspace()
+              if (suggestion !== null) {
+                suggestionDispatch({
+                  type: 'setSuggestion',
+                  payload: suggestion,
+                })
+                return
+              } else {
+                suggestionDispatch({ type: 'clearSuggestion' })
+              }
+            }
+            const { selection } = editor
+            if (selection) {
+              if (Range.isCollapsed(selection))
+                editor.deleteBackward('character')
+              else editor.deleteFragment()
+            }
+            ReactEditor.focus(editor)
+            return
+          }
+          case 'enter':
+            editor.insertBreak()
+            break
+          case 'space':
+            editor.insertText(' ')
+            break
+          default:
+            return
+        }
+        if (isBN && avro.ongoingInputSession)
+          commitOrClose(avro, suggestionState)
+        suggestionDispatch({ type: 'clearSuggestion' })
+        ReactEditor.focus(editor)
+      } else {
+        if (isBN) {
+          if (/^[^\P{ASCII} ]$/u.test(key)) {
+            const { selection } = editor
+            if (selection) {
+              if (Range.isCollapsed(selection)) {
+                if (!avro.ongoingInputSession)
+                  inputStartRef.current = Range.start(selection)
+              } else {
+                Transforms.insertText(editor, '')
+                inputStartRef.current = Range.start(selection)
+              }
+            }
+            const suggestion = avro.getSuggestionForKey(key)
+            suggestionDispatch({ type: 'setSuggestion', payload: suggestion })
+            return
+          } else {
+            if (avro.ongoingInputSession) commitOrClose(avro, suggestionState)
+            suggestionDispatch({ type: 'clearSuggestion' })
+          }
+        }
+        if (editor.selection) {
+          editor.insertText(key)
+          ReactEditor.focus(editor)
+        }
+      }
+    },
+    [avro, editor, isBN, suggestionState]
+  )
+
+  useEffect(() => {
+    window.addEventListener('virtual-keypress', onKeyPress)
+    return () => {
+      window.removeEventListener('virtual-keypress', onKeyPress)
+    }
+  }, [onKeyPress])
 
   useEffect(() => {
     if (!ReactEditor.isFocused(editor)) {
@@ -175,6 +256,7 @@ const Editor = ({ initialValue }: { initialValue: Descendant[] }) => {
       }}
     >
       <Editable
+        id="slate-editor"
         aria-label="slate"
         inputMode="none"
         onKeyDown={onKeyDown}
@@ -209,6 +291,7 @@ export const updatePreEdit = (
   if (anchor !== null && selection && Range.isCollapsed(selection)) {
     Transforms.setSelection(editor, { anchor })
     Transforms.insertText(editor, text)
+    ReactEditor.focus(editor)
   }
 }
 

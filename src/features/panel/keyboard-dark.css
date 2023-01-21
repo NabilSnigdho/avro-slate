@@ -1,0 +1,23 @@
+/**
+ * simple-keyboard
+ * Theme: hg-theme-default (dark)
+ */
+.dark .hg-theme-default {
+  background-color: #0f0f0f;
+}
+
+.dark .hg-theme-default .hg-button {
+  box-shadow: 0px 0px 3px -1px rgba(255, 255, 255, 0.3);
+  background: #2d2d2d;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.dark .hg-theme-default .hg-button.hg-activeButton {
+  background: #1f1f1f;
+}
+
+.dark .hg-theme-default .hg-button.hg-selectedButton {
+  background: rgba(5, 25, 70, 0.53);
+  color: white;
+}

@@ -35,8 +35,7 @@ export const matchRules = (
             s = end
             e = end + value.length
           }
-          if (isExact(value, input, s, e) === neg)
-            continue checkRules
+          if (isExact(value, input, s, e) === neg) continue checkRules
           break
         }
       }

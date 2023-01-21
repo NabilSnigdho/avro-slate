@@ -33,7 +33,7 @@ export const fixString = (input: string) =>
     .join('')
 
 export const convertToUnicodeValue = (input: string) =>
-  input.replaceAll(/\P{ASCII}/ug, (c) => `\\u0${c.charCodeAt(0).toString(16)}`)
+  input.replaceAll(/\P{ASCII}/gu, (c) => `\\u0${c.charCodeAt(0).toString(16)}`)
 
 export const isVowel = (c: string) => 'aeiou'.includes(c.toLowerCase())
 

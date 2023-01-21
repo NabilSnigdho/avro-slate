@@ -175,10 +175,10 @@ export default class SuggestionBuilder {
   }
 
   suggest(input: string, userSelections: Record<string, string>) {
-    //Seperate begining and trailing padding characters, punctuations etc. from whole word
+    //Separate beginning and trailing padding characters, punctuations etc. from whole word
     const splitWord = separatePadding(input)
 
-    //Convert begining and trailing padding text to phonetic Bangla
+    //Convert beginning and trailing padding text to phonetic Bangla
     splitWord.begin = this.phonetic.convert(splitWord.begin)
     splitWord.end = this.phonetic.convert(splitWord.end)
 
@@ -220,9 +220,10 @@ export default class SuggestionBuilder {
 
     for (const word of sortedWords) {
       words.add(word)
+      if (words.size >= 10) break
     }
 
-    const candidates = [...words].slice(0, 10)
+    const candidates = [...words]
     const extra = []
 
     /* 3rd Item: Classic Avro Phonetic */
@@ -237,7 +238,7 @@ export default class SuggestionBuilder {
       if (data.emoticons.has(input)) {
         candidates.unshift(input)
         candidatesWithPadding.unshift(input)
-      } else {
+      } else if (!extra.includes(input)) {
         extra.push(input)
       }
     }

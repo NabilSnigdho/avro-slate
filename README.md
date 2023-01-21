@@ -7,23 +7,40 @@ Avro Slate is inspired by [AvroPad](https://github.com/omicronlab/avro-pad/) and
 ## Suggestion differences from AvroPad
 
 Currently known differences are:
+
 - Full stop(".") in number is not converted into Dari("।")
+
 ```js
 // For input "1.5" candidates will be
-["১.৫", "1.5"]
+;['১.৫', '1.5']
 ```
+
 - Full stops(".") in abbreviations are not converted into Dari("।")
+
 ```js
 // For input "es.es.si." candidates will be
-["এস.এস.সি.", "es.es.si."]
+;['এস.এস.সি.', 'es.es.si.']
 ```
+
 - The phonetic value of input is guaranteed to appear in suggestion.
+
 ```js
 // For input "kOnO"
 // Candidates in Avro Slate
-["কোন", "কোনও", "কওন", "কোঁ", "কোং","কোণ", "কন", "কওনও", "কোনো", "kOnO"]
-// Candidates in AvroPad(phonetic value "কোনো" is missing)
-["কোন", "কোনও", "কওন", "কোঁ", "কোং","কোণ", "কন", "কওনও", "কোঁও", "কোঙও", "kOnO"]
+;['কোন', 'কোনও', 'কওন', 'কোঁ', 'কোং', 'কোণ', 'কন', 'কওনও', 'কোনো', 'kOnO'][
+  // Candidates in AvroPad(phonetic value "কোনো" is missing)
+  ('কোন',
+  'কোনও',
+  'কওন',
+  'কোঁ',
+  'কোং',
+  'কোণ',
+  'কন',
+  'কওনও',
+  'কোঁও',
+  'কোঙও',
+  'kOnO')
+]
 ```
 
 ## Android support
@@ -33,15 +50,19 @@ One of the key features of Avro Slate is that it behaves similar to the native I
 ## Development
 
 ### Install npm dependencies
+
 ```sh
 npm install
 ```
+
 ### Build Rust wasm crates
 
 Install [Rust toolchain](https://www.rust-lang.org/tools/install), and [wasm-pack](https://rustwasm.github.io/wasm-pack/installer/), then run,
+
 ```sh
 npm run wasm
 ```
+
 ### Start dev server
 
 ```sh
@@ -51,25 +72,30 @@ npm run dev
 ### Production Build
 
 To build the project for production, run
+
 ```sh
 npm run build
 ```
+
 This will build the project under ./dist directory.
 
 To locally preview the production build, run
+
 ```sh
 npm run preview
 ```
 
 ## Contributing
+
 Pull requests are welcome. Open an issue for bug report, feature request or suggestions regarding ui, keyboard behavior etc.
 
 ## Acknowledgements
-* [হাসান জলছবি](https://lipighor.com/HasanJolchobi.html) font used in logo
-* [AvroPad](https://github.com/omicronlab/avro-pad/) by OmicronLab
-* [ibus-avro](https://github.com/sarim/ibus-avro) by Sarim Khan
-* [অক্ষর - Okkhor](https://github.com/gulshan/okkhor) by Gulshan
-* [OBK](https://github.com/OpenBangla/OpenBangla-Keyboard) and [riti (রীতি)](https://github.com/OpenBangla/riti/) by OpenBangla
+
+- [হাসান জলছবি](https://lipighor.com/HasanJolchobi.html) font used in logo
+- [AvroPad](https://github.com/omicronlab/avro-pad/) by OmicronLab
+- [ibus-avro](https://github.com/sarim/ibus-avro) by Sarim Khan
+- [অক্ষর - Okkhor](https://github.com/gulshan/okkhor) by Gulshan
+- [OBK](https://github.com/OpenBangla/OpenBangla-Keyboard) and [riti (রীতি)](https://github.com/OpenBangla/riti/) by OpenBangla
 
 ## License
 
