@@ -5,7 +5,6 @@ import { ReactEditor, useSlate } from 'slate-react'
 import { updatePreEdit } from './Editor'
 
 import type AvroPhonetic from 'src/avro-phonetic'
-import type { AvroSlateEditor } from './custom-types'
 import type { SuggestionState, SuggestionAction } from './suggestionReducer'
 import { cls } from '@/common/cls'
 
@@ -21,7 +20,7 @@ export const Suggestion = React.memo(
     inputStart: Point | null
     avro: AvroPhonetic
   }) => {
-    const editor: AvroSlateEditor = useSlate()
+    const editor = useSlate()
 
     const { x, y, reference, strategy, refs } = useFloating({
       placement: 'bottom-start',

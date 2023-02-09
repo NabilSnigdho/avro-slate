@@ -9,7 +9,6 @@ import {
   deleteAllDrafts,
 } from './draftsAPI'
 import { RootState } from '@/app/store'
-import { values } from 'idb-keyval'
 
 interface DraftsState {
   drafts: { id: number; title: string | null }[]

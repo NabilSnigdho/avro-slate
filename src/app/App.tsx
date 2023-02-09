@@ -29,7 +29,7 @@ function App() {
 
   return (
     <main className="flex h-screen md:divide-x <md:flex-col dark:divide-black">
-      <div className="flex flex-col flex-grow min-h-0">
+      <div className="flex flex-col flex-grow min-h-0 overflow-x-auto">
         {initialValue === null ? (
           <div className="p-3 flex-grow">Loading draft...</div>
         ) : (
