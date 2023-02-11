@@ -17,6 +17,7 @@ export default defineConfig({
         'favicon.ico',
         'robots.txt',
         'apple-touch-icon.png',
+        'avro-icon.webp',
       ],
       manifest: {
         name: 'Avro Slate',
