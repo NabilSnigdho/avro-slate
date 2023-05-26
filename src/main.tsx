@@ -1,8 +1,11 @@
+import 'virtual:uno.css'
+import '@unocss/reset/tailwind.css'
+
 import React from 'react'
 import { createRoot } from 'react-dom/client'
+import { Provider } from 'react-redux'
 import App from './app/App'
 import store from './app/store'
-import { Provider } from 'react-redux'
 import { initHorizontalSwipeEvents } from './common/horizontal-swipe-event'
 import { fetchDrafts } from './features/drafts/draftsAPI'
 

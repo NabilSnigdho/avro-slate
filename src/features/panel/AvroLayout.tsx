@@ -111,12 +111,12 @@ const numbers = [
 ]
 
 export const AvroLayout = (
-  <section className="h-[14.375rem] p-1 grid grid-rows-[auto,1fr] overflow-y-auto bg-stone-50 dark:bg-stone-900">
-    <h1 className="text-lg text-center">
+  <section className="h-[14.375rem] p-1 grid grid-rows-[auto_1fr] overflow-y-auto bg-stone-50 dark:bg-stone-900">
+    <h1 className="text-lg text-center mb-1">
       {'Avro Phonetic Layout © '}
       <a href="https://www.omicronlab.com/">OmicronLab</a>
     </h1>
-    <div className="grid xl:grid-cols-[16fr,12fr,3fr,3fr] gap-1 text-sm justify-center">
+    <div className="grid xl:grid-cols-[16fr_12fr_3fr_3fr] gap-1 text-sm justify-center">
       <div className="grid md:(grid-flow-col grid-rows-5 grid-cols-none) sm:grid-cols-10 <sm:grid-cols-5 gap-1">
         {consonants.map(({ bn, en }) => (
           <div key={bn} className="inline-flex items-center gap-x-1">
@@ -165,7 +165,7 @@ export const AvroLayout = (
         ))}
       </div>
       <div>
-        <dl className="grid grid-cols-[auto,1fr] gap-1 items-center p-1 border-2 rounded border-stone-300 dark:border-stone-700 text-xs">
+        <dl className="grid grid-cols-[auto_1fr] gap-1 items-center p-1 border-2 rounded border-stone-300 dark:border-stone-700 text-xs">
           <dt className={caseInsensitive}>
             <BsSquareFill />
           </dt>

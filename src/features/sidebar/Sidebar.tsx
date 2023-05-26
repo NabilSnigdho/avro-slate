@@ -12,7 +12,7 @@ export const Sidebar = () => {
     <aside
       className={cls(
         'p-3 md:w-[16.25rem] flex flex-col flex-shrink-0 gap-y-5 bg-gray-100 dark:bg-dark-300',
-        ['keyboard', 'avro-layout'].includes(selectedTab) && '<md:hidden'
+        ['keyboard', 'avro-layout'].includes(selectedTab) && 'lt-md:hidden'
       )}
     >
       <Drafts />

@@ -65,7 +65,7 @@ export const Suggestion = ({
       <div ref={refs.setFloating} style={floatingStyles} className="popper">
         <div className="px-2">{rawInput}</div>
         <ol
-          className="list-decimal list-inside p-px border-t dark:border-black horizontal:(flex flex-wrap)"
+          className="list-decimal list-inside p-px border-t dark:border-black lt-horizontal:(flex flex-wrap)"
           role="listbox"
         >
           {candidates.map((suggestion, i) => {

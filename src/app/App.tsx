@@ -1,6 +1,3 @@
-import 'virtual:windi-devtools'
-import 'virtual:windi.css'
-
 import { fetchDictionaryData } from '@/avro-phonetic/data'
 import { selectInitialValue } from '@/features/drafts/draftsSlice'
 import { Panel } from '@/features/panel/Panel'
@@ -28,7 +25,7 @@ function App() {
   }
 
   return (
-    <main className="flex h-screen md:divide-x <md:flex-col dark:divide-black">
+    <main className="flex h-screen !h-[100dvh] md:divide-x lt-md:flex-col dark:divide-black">
       <div className="flex flex-col flex-grow min-h-0 overflow-x-auto">
         {initialValue === null ? (
           <div className="p-3 flex-grow">Loading draft...</div>

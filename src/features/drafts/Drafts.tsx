@@ -41,8 +41,8 @@ export const Drafts = React.memo(function Drafts() {
   return (
     <section
       className={cls(
-        'flex flex-col flex-grow gap-y-1 min-h-0 <md:h-[12.875rem]',
-        selectedTab === 'drafts' || '<md:hidden'
+        'flex flex-col flex-grow gap-y-1 min-h-0 lt-md:h-[12.875rem]',
+        selectedTab === 'drafts' || 'lt-md:hidden'
       )}
     >
       <div className="flex">
@@ -89,7 +89,7 @@ export const Drafts = React.memo(function Drafts() {
             <li
               ref={currentDraftRef}
               key={id}
-              className="px-2 py-1 grid grid-cols-[auto,1fr] items-center rounded-sm item-active cursor-default"
+              className="px-2 py-1 grid grid-cols-[auto_1fr] items-center rounded-sm item-active cursor-default"
             >
               <RiDraftLine className="h-5 w-5 mr-2" />
               <span className="truncate font-mono">
@@ -102,7 +102,7 @@ export const Drafts = React.memo(function Drafts() {
                 onClick={() => {
                   dispatch(fetchDraftByIndex(index))
                 }}
-                className="px-2 py-1 grid grid-cols-[auto,1fr] items-center rounded-sm flex-grow"
+                className="px-2 py-1 grid grid-cols-[auto_1fr] items-center rounded-sm flex-grow"
               >
                 <RiDraftLine className="h-5 w-5 mr-2" />
                 <span className="truncate text-left font-mono">{title}</span>

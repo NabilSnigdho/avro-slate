@@ -11,11 +11,11 @@
   font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue',
     Helvetica, Arial, 'Lucida Grande', sans-serif;
   background-color: #ececec;
-  @apply px-1 py-[0.4375rem] rounded;
+  --uno-apply: 'px-1 py-[0.4375rem] rounded';
 }
 
 .hg-theme-default .hg-rows {
-  @apply grid .gap-y-1;
+  --uno-apply: 'grid gap-y-1';
 }
 
 .hg-theme-default .hg-button span {
@@ -36,7 +36,7 @@
 }
 
 .hg-theme-default .hg-row {
-  @apply gap-x-1;
+  --uno-apply: 'gap-x-1';
   display: flex;
   justify-content: center;
 }
@@ -47,7 +47,7 @@
 
 .hg-theme-default .hg-button {
   box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.3);
-  @apply flex items-center justify-center h-10 p-1 rounded;
+  --uno-apply: 'flex items-center justify-center h-10 p-1 rounded';
   background: white;
   border-bottom: 1px solid #b5b5b5;
   cursor: pointer;

@@ -8,7 +8,7 @@ export const Footer = () => {
 
   return (
     <footer
-      className={cls('flex gap-3', selectedTab === 'hide' || '<md:hidden')}
+      className={cls('flex gap-3', selectedTab === 'hide' || 'lt-md:hidden')}
     >
       <span className="inline-flex items-center gap-x-2">
         <img
