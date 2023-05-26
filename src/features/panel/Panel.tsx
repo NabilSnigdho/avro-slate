@@ -11,7 +11,7 @@ export const Panel = () => {
     <div>
       <BottomBar />
       {selectedTab === 'keyboard' && <Keyboard />}
-      {selectedTab === 'avro-layout' && <AvroLayout />}
+      {selectedTab === 'avro-layout' && AvroLayout}
     </div>
   )
 }

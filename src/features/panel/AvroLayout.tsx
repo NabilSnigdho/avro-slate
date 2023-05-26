@@ -1,4 +1,3 @@
-import React from 'react'
 import { BsSquareFill } from 'react-icons/bs'
 
 const caseInsensitive = 'text-pink-700 dark:text-pink-400'
@@ -111,74 +110,72 @@ const numbers = [
   { bn: '৯', en: '9' },
 ]
 
-export const AvroLayout = React.memo(() => {
-  return (
-    <section className="h-[14.375rem] p-1 grid grid-rows-[auto,1fr] overflow-y-auto bg-stone-50 dark:bg-stone-900">
-      <h1 className="text-lg text-center">
-        {'Avro Phonetic Layout © '}
-        <a href="https://www.omicronlab.com/">OmicronLab</a>
-      </h1>
-      <div className="grid xl:grid-cols-[16fr,12fr,3fr,3fr] gap-1 text-sm justify-center">
-        <div className="grid md:(grid-flow-col grid-rows-5 grid-cols-none) sm:grid-cols-10 <sm:grid-cols-5 gap-1">
-          {consonants.map(({ bn, en }) => (
-            <div key={bn} className="inline-flex items-center gap-x-1">
-              <span className="bg-stone-300 dark:bg-stone-700 p-1 basis-1/2 text-center rounded-l">
-                {bn}
-              </span>
-              <span className="whitespace-nowrap">{en}</span>
-            </div>
-          ))}
-        </div>
-        <div className="grid xl:(grid-flow-col grid-rows-5 grid-cols-none) lg:grid-cols-6 sm:grid-cols-5 <sm:grid-cols-3 gap-1">
-          {vowels.map(({ bn, kar, en }) => (
-            <div key={bn} className="inline-flex items-center gap-x-1">
-              <span className="bg-stone-200 dark:bg-stone-600 p-1 basis-2/3 rounded-l inline-flex justify-between">
-                <span>{bn}</span>
-                <span>{kar}</span>
-              </span>
-              <span>{en}</span>
-            </div>
-          ))}
-          {folas.map(({ bn, en }) => (
-            <div key={bn} className="inline-flex items-center gap-x-1">
-              <span className="bg-stone-300 dark:bg-stone-700 p-1 basis-3/5 whitespace-nowrap text-center rounded-l">
-                {bn}
-              </span>
-              <span>{en}</span>
-            </div>
-          ))}
-          {punctuations.map(({ bn, en }) => (
-            <div key={bn} className="inline-flex items-center gap-x-1">
-              <span className="bg-stone-300 dark:bg-stone-700 p-1 basis-2/3 whitespace-nowrap text-center rounded-l">
-                {bn}
-              </span>
-              <span>{en}</span>
-            </div>
-          ))}
-        </div>
-        <div className="grid xl:(grid-flow-col grid-rows-5 grid-cols-none) sm:grid-cols-10 <sm:grid-cols-5 gap-1">
-          {numbers.map(({ bn, en }) => (
-            <div key={bn} className="inline-flex items-center gap-x-1">
-              <span className="bg-stone-300 dark:bg-stone-700 p-1 basis-1/2 text-center rounded-l">
-                {bn}
-              </span>
-              <span>{en}</span>
-            </div>
-          ))}
-        </div>
-        <div>
-          <dl className="grid grid-cols-[auto,1fr] gap-1 items-center p-1 border-2 rounded border-stone-300 dark:border-stone-700 text-xs">
-            <dt className={caseInsensitive}>
-              <BsSquareFill />
-            </dt>
-            <dd>Case insensitive</dd>
-            <dt>(v)</dt>
-            <dd>Any vowel</dd>
-            <dt>(c)</dt>
-            <dd>Suitable Consonant</dd>
-          </dl>
-        </div>
+export const AvroLayout = (
+  <section className="h-[14.375rem] p-1 grid grid-rows-[auto,1fr] overflow-y-auto bg-stone-50 dark:bg-stone-900">
+    <h1 className="text-lg text-center">
+      {'Avro Phonetic Layout © '}
+      <a href="https://www.omicronlab.com/">OmicronLab</a>
+    </h1>
+    <div className="grid xl:grid-cols-[16fr,12fr,3fr,3fr] gap-1 text-sm justify-center">
+      <div className="grid md:(grid-flow-col grid-rows-5 grid-cols-none) sm:grid-cols-10 <sm:grid-cols-5 gap-1">
+        {consonants.map(({ bn, en }) => (
+          <div key={bn} className="inline-flex items-center gap-x-1">
+            <span className="bg-stone-300 dark:bg-stone-700 p-1 basis-1/2 text-center rounded-l">
+              {bn}
+            </span>
+            <span className="whitespace-nowrap">{en}</span>
+          </div>
+        ))}
       </div>
-    </section>
-  )
-})
+      <div className="grid xl:(grid-flow-col grid-rows-5 grid-cols-none) lg:grid-cols-6 sm:grid-cols-5 <sm:grid-cols-3 gap-1">
+        {vowels.map(({ bn, kar, en }) => (
+          <div key={bn} className="inline-flex items-center gap-x-1">
+            <span className="bg-stone-200 dark:bg-stone-600 p-1 basis-2/3 rounded-l inline-flex justify-between">
+              <span>{bn}</span>
+              <span>{kar}</span>
+            </span>
+            <span>{en}</span>
+          </div>
+        ))}
+        {folas.map(({ bn, en }) => (
+          <div key={bn} className="inline-flex items-center gap-x-1">
+            <span className="bg-stone-300 dark:bg-stone-700 p-1 basis-3/5 whitespace-nowrap text-center rounded-l">
+              {bn}
+            </span>
+            <span>{en}</span>
+          </div>
+        ))}
+        {punctuations.map(({ bn, en }) => (
+          <div key={bn} className="inline-flex items-center gap-x-1">
+            <span className="bg-stone-300 dark:bg-stone-700 p-1 basis-2/3 whitespace-nowrap text-center rounded-l">
+              {bn}
+            </span>
+            <span>{en}</span>
+          </div>
+        ))}
+      </div>
+      <div className="grid xl:(grid-flow-col grid-rows-5 grid-cols-none) sm:grid-cols-10 <sm:grid-cols-5 gap-1">
+        {numbers.map(({ bn, en }) => (
+          <div key={bn} className="inline-flex items-center gap-x-1">
+            <span className="bg-stone-300 dark:bg-stone-700 p-1 basis-1/2 text-center rounded-l">
+              {bn}
+            </span>
+            <span>{en}</span>
+          </div>
+        ))}
+      </div>
+      <div>
+        <dl className="grid grid-cols-[auto,1fr] gap-1 items-center p-1 border-2 rounded border-stone-300 dark:border-stone-700 text-xs">
+          <dt className={caseInsensitive}>
+            <BsSquareFill />
+          </dt>
+          <dd>Case insensitive</dd>
+          <dt>(v)</dt>
+          <dd>Any vowel</dd>
+          <dt>(c)</dt>
+          <dd>Suitable Consonant</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+)

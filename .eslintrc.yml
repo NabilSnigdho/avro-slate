@@ -5,7 +5,9 @@ extends:
   - eslint:recommended
   - plugin:@typescript-eslint/recommended
   - plugin:react/recommended
+  - plugin:react/jsx-runtime
   - plugin:react-hooks/recommended
+  - plugin:jsx-a11y/recommended
   - prettier
 parser: '@typescript-eslint/parser'
 parserOptions:
@@ -17,6 +19,8 @@ plugins:
   - '@typescript-eslint'
   - react
   - react-hooks
-rules:
-  react-hooks/rules-of-hooks: error
-  react-hooks/exhaustive-deps: warn
+  - jsx-a11y
+settings:
+  react:
+    version: detect
+root: true

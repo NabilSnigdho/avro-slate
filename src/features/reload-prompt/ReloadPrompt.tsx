@@ -4,7 +4,7 @@ import { useRegisterSW } from 'virtual:pwa-register/react'
 import useConstant from 'use-constant'
 import Toast from '@/common/components/Toast'
 
-export const ReloadPrompt = React.memo(() => {
+export const ReloadPrompt = React.memo(function ReloadPrompt() {
   const {
     offlineReady: [offlineReady, setOfflineReady],
     needRefresh: [needRefresh, setNeedRefresh],

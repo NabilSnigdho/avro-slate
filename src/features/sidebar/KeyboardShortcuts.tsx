@@ -1,7 +1,7 @@
 import React from 'react'
 import Key, { CtrlKey } from '@/common/components/Key'
 
-export const KeyboardShortcuts = React.memo(() => {
+export const KeyboardShortcuts = React.memo(function KeyboardShortcuts() {
   return (
     <section className="<md:hidden">
       <h1 className="text-lg uppercase mb-2">Keyboard Shortcuts</h1>

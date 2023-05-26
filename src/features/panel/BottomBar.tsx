@@ -55,7 +55,7 @@ export const BottomBar = () => {
     (tab: string) => {
       dispatch(setSelectedTab(tab))
     },
-    [dispatch, setSelectedTab]
+    [dispatch]
   )
 
   const isBN = useAppSelector(selectIsBN)

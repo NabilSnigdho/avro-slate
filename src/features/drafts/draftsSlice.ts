@@ -106,7 +106,7 @@ const makeTitle = (value: Descendant[], id: number) => {
   let title: string
   return value.findIndex((n) => (title = Node.string(n).trim()) !== '') === -1
     ? `Draft ${id + 1}`
-    : title!
+    : title! // eslint-disable-line @typescript-eslint/no-non-null-assertion
 }
 
 // Action creators are generated for each case reducer function

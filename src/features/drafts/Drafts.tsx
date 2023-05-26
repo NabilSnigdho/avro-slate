@@ -14,7 +14,7 @@ import {
 } from './draftsAPI'
 import { newDraft, selectDraftState } from './draftsSlice'
 
-export const Drafts = React.memo(() => {
+export const Drafts = React.memo(function Drafts() {
   const dispatch = useAppDispatch()
   const selectedTab = useAppSelector(selectSelectedTab)
   const { drafts, currentIndex } = useAppSelector(selectDraftState)
@@ -26,7 +26,7 @@ export const Drafts = React.memo(() => {
     if (currentId !== null) localStorage.setItem('draftId', `${currentId}`)
   }, [currentId])
 
-  const { x, y, reference, floating, strategy } = useFloating({
+  const { refs, floatingStyles } = useFloating({
     placement: 'bottom-end',
     middleware: [flip()],
   })
@@ -49,19 +49,15 @@ export const Drafts = React.memo(() => {
         <h1 className="text-lg uppercase flex-grow">Drafts</h1>
         <Menu>
           <Menu.Button
-            ref={reference}
+            ref={refs.setReference}
             className="item-hoverable inline-flex items-center focusable"
           >
             <span className="sr-only">drafts options</span>
             <FiMoreVertical className="w-5 h-5" aria-hidden="true" />
           </Menu.Button>
           <Menu.Items
-            ref={floating}
-            style={{
-              position: strategy,
-              top: y ?? '',
-              left: x ?? '',
-            }}
+            ref={refs.setFloating}
+            style={floatingStyles}
             className="p-px popper"
           >
             <Menu.Item>

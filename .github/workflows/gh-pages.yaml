@@ -27,8 +27,8 @@ jobs:
       - name: Build Rust wasm crates
         run: pnpm wasm
 
-      - name: TS type check
-        run: pnpm tsc
+      - name: Lint
+        run: pnpm lint
 
       - name: Vite Build
         run: pnpm vite build --base=/avro-slate/
